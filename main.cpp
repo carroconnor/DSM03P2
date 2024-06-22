@@ -88,7 +88,7 @@ int main(){
                 }
                 std::cout << std::endl;
                 std::cout << "List of Unfinished Bug Reports: " << std::endl;
-
+                std::cout << std::endl;
                 while(!priorityQueue.isEmptyQueue()){
                     BugReport report = priorityQueue.front();
                     std::cout << "BugReport ID: " << std::to_string(report.getId()) << std::endl;
@@ -97,6 +97,8 @@ int main(){
                     std::cout << "Status: " << report.getStatus() << std::endl;
                     std::cout << "Priority: " << std::to_string(report.getPriority()) << std::endl;
                     std::cout << "Date: " << report.getDate() << std::endl;
+                    std::cout << std::endl;
+                    std::cout << std::endl;
                     std::cout << std::endl;
                     priorityQueue.dequeue();
                 }

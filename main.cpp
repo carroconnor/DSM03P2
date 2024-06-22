@@ -29,7 +29,7 @@ int main(){
 
     while(true){
         printMenu();
-        int choice = inputInt("Enter choice: ", 1, 3);
+        int choice = inputInt("", 1, 3); //Enter choice: 
 
         std::smatch match;
         std::string date;

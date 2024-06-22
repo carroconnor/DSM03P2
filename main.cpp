@@ -82,7 +82,7 @@ int main(){
                     std::cout << "Reporter: " << report.getReporter() << std::endl;
                     std::cout << "Status: " << report.getStatus() << std::endl;
                     std::cout << "Priority: " << std::to_string(report.getPriority()) << std::endl;
-                    std::cout << "Date: \n" << report.getDate() << std::endl;
+                    std::cout << "Date: " << report.getDate() << std::endl;
                     completedQueue.dequeue();
                 }
 
@@ -95,7 +95,7 @@ int main(){
                     std::cout << "Reporter: " << report.getReporter() << std::endl;
                     std::cout << "Status: " << report.getStatus() << std::endl;
                     std::cout << "Priority: " << std::to_string(report.getPriority()) << std::endl;
-                    std::cout << "Date: \n" << report.getDate() << std::endl;
+                    std::cout << "Date: " << report.getDate() << std::endl;
                     priorityQueue.dequeue();
                 }
                 return 0;

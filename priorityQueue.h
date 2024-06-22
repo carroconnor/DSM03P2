@@ -1,10 +1,16 @@
 #ifndef PRIORIYQUEUE_H
 #define PRIORIYQUEUE_H
 #include "queueADT.h"
-#include "linkedList.h"
 #include <stdexcept>
 #include <iostream>
 using std::out_of_range;
+
+template <class Type>
+struct nodeType
+{
+	Type * info;
+	nodeType<Type> *link;
+};
 
 template <class Type>
 class priorityQueueType: public queueADT<Type>
@@ -22,8 +28,8 @@ public:
     priorityQueueType(const priorityQueueType<Type>&);
     ~priorityQueueType();
 private:
-    nodeType<Type> * queueFront;
-    nodeType<Type> * queueRear;
+    nodeType<Type> * queueFront; //front element
+    nodeType<Type> * queueRear; //back element
     int maxQueueSize;
     int currentSize;
 };
@@ -31,6 +37,7 @@ private:
 template <class Type>
 priorityQueueType<Type>::priorityQueueType()
 {
+    //initialize values
     queueFront = nullptr;
     queueRear = nullptr;
     maxQueueSize = 100;
@@ -40,6 +47,7 @@ priorityQueueType<Type>::priorityQueueType()
 template <class Type>
 priorityQueueType<Type>::priorityQueueType(const priorityQueueType<Type>& other)
 {
+    //copy queue
     queueFront = nullptr;
     queueRear = nullptr;
     maxQueueSize = other.maxQueueSize;
@@ -68,8 +76,8 @@ bool priorityQueueType<Type>::isFullQueue() const
 template <class Type>
 void priorityQueueType<Type>::initializeQueue()
 {
+    //reset all nodes
     nodeType<Type> * current;
-    
     
     while(queueFront != nullptr)
     {
@@ -80,12 +88,14 @@ void priorityQueueType<Type>::initializeQueue()
     queueRear = nullptr;
 }
 
+//get the front element
 template <class Type>
 Type priorityQueueType<Type>::front() const
 {
     return *(queueFront->info);
 }
 
+//get the back element
 template <class Type>
 Type priorityQueueType<Type>::back() const
 {
@@ -99,26 +109,30 @@ void priorityQueueType<Type>::enqueue(const Type& queueElement)
         throw out_of_range("Queue is full");
     }
     
+    //create new node
     nodeType<Type> *newNode = new nodeType<Type>;
     newNode->info = new Type(queueElement);
     newNode->link = nullptr;
 
+    //if queue is empty, set front and rear to new node
     if(queueFront == nullptr){
         queueFront = newNode;
         queueRear = newNode;
     } else {
-        nodeType<Type> *current = queueFront;
+        nodeType<Type> *current = queueFront; //keep track of current, start with front
         nodeType<Type> *previous = nullptr;
 
+        //update list based on priority, higher priority is closer to front
         while (current != nullptr && current->info->getPriority() >= queueElement.getPriority()) {
             previous = current;
             current = current->link;
         }
-
+        //if previous is null, new node is highest priority
         if (previous == nullptr) {
             newNode->link = queueFront;
             queueFront = newNode;
         } else {
+            //insert new node between previous and current
             previous->link = newNode;
             newNode->link = current;
 
@@ -139,13 +153,14 @@ Type priorityQueueType<Type>::dequeue()
     }
 
     nodeType<Type> *temp = queueFront;
-    Type frontElement = *(queueFront->info);
-    queueFront = queueFront->link;
+    Type frontElement = *(queueFront->info); //get what will be the front element
+    queueFront = queueFront->link; //move front to next element
 
     if (queueFront == nullptr) {
         queueRear = nullptr;
     }
 
+    //delete temp node
     delete temp->info;
     delete temp;
     currentSize--;

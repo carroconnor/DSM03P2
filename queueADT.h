@@ -2,6 +2,14 @@
 
 #ifndef H_queueADT
 #define H_queueADT 
+
+// //added nodeType here, was getting errors in codegrade in files I didn't think I was supposed to touch
+// template <class Type>
+// struct nodeType
+// {
+// 	Type * info;
+// 	nodeType<Type> *link;
+// };
    
 template <class Type> 
 class queueADT

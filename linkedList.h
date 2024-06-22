@@ -30,8 +30,8 @@ public:
     linkedListIterator<Type> end();
 
 protected:
-    node<Type> *head;
-    node<Type> *tail;
+    nodeType<Type> *head;
+    nodeType<Type> *tail;
     int count;
 
 private:
@@ -54,7 +54,7 @@ linkedListType<Type>::linkedListType()
 template <class Type>
 void linkedListType<Type>::destroyList()
 {
-    node<Type> *temp;
+    nodeType<Type> *temp;
     while (head != nullptr)
     {
         temp = head;
@@ -75,7 +75,7 @@ template <class Type>
 string linkedListType<Type>::print() const
 {
     std::ostringstream out;
-    node<Type> *current;
+    nodeType<Type> *current;
     current = head;
     while (current != nullptr)
     {
@@ -126,8 +126,8 @@ linkedListIterator<Type> linkedListType<Type>::end()
 template <class Type>
 void linkedListType<Type>::copyList(const linkedListType<Type> &otherList)
 {
-    node<Type> *newNode;
-    node<Type> *current;
+    nodeType<Type> *newNode;
+    nodeType<Type> *current;
     if (!this->isEmptyList())
     {
         destroyList();
@@ -142,14 +142,14 @@ void linkedListType<Type>::copyList(const linkedListType<Type> &otherList)
     {
         current = otherList.head;
         count = otherList.count;
-        this->head = new node<Type>;
+        this->head = new nodeType<Type>;
         head->info = new Type(*(current->info));
         head->link = nullptr;
         tail = head;
         current->link;
         while (current != nullptr)
         {
-            newNode = new node<Type>;
+            newNode = new nodeType<Type>;
             newNode->info = new Type(*(current->info));
             newNode->link = nullptr;
             tail->link = newNode;

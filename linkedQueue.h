@@ -1,8 +1,8 @@
 #ifndef LINK_H
 #define LINK_H
 #include "queueADT.h"
+#include "linkedListIterator.h"
 #include <stdexcept>
-#include "priorityQueue.h"
 using std::out_of_range;
 /*
 template <class Type>
@@ -28,8 +28,8 @@ public:
 	linkedQueueType(const linkedQueueType<Type>&);
 	~linkedQueueType();
 private:	
-	nodeType<Type> * queueFront;
-	nodeType<Type> * queueRear;
+	node<Type> * queueFront;
+	node<Type> * queueRear;
 	void copyQueue(const linkedQueueType<Type>&);
 };
 
@@ -48,7 +48,7 @@ bool linkedQueueType<Type>::isFullQueue() const
 template <class Type>
 void linkedQueueType<Type>::initializeQueue()
 {
-	nodeType<Type> * current;
+	node<Type> * current;
 	
 	
 	while(queueFront != nullptr)
@@ -75,8 +75,8 @@ Type linkedQueueType<Type>::back() const
 template <class Type>
 void linkedQueueType<Type>::enqueue(const Type& queueElement)
 {
-	nodeType<Type> * newNode;
-	newNode = new nodeType<Type>;
+	node<Type> * newNode;
+	newNode = new node<Type>;
 	newNode->info = new Type(queueElement);
 	newNode->link = nullptr;
 	if(isEmptyQueue())
@@ -98,7 +98,7 @@ Type linkedQueueType<Type>::dequeue()
 		throw out_of_range("Cannot remove from an empty queue.");
 	else
 	{
-		nodeType<Type> * temp;
+		node<Type> * temp;
 		temp = queueFront;
 		queueFront = queueFront->link;
 		Type t(*(temp->info));
@@ -124,7 +124,7 @@ template <class Type>
 void linkedQueueType<Type>::copyQueue(const linkedQueueType<Type>& otherQueue)
 {
 	this->initializeQueue();
-	nodeType<Type> * current;
+	node<Type> * current;
 	current = otherQueue.queueFront;
 	while(current != nullptr)
 	{

@@ -22,8 +22,8 @@ public:
     priorityQueueType(const priorityQueueType<Type>&);
     ~priorityQueueType();
 private:
-    nodeType<Type> * queueFront;
-    nodeType<Type> * queueRear;
+    node<Type> * queueFront;
+    node<Type> * queueRear;
     int maxQueueSize;
     int currentSize;
 };
@@ -68,7 +68,7 @@ bool priorityQueueType<Type>::isFullQueue() const
 template <class Type>
 void priorityQueueType<Type>::initializeQueue()
 {
-    nodeType<Type> * current;
+    node<Type> * current;
     
     
     while(queueFront != nullptr)
@@ -99,7 +99,7 @@ void priorityQueueType<Type>::enqueue(const Type& queueElement)
         throw out_of_range("Queue is full");
     }
     
-    nodeType<Type> *newNode = new nodeType<Type>;
+    node<Type> *newNode = new node<Type>;
     newNode->info = new Type(queueElement);
     newNode->link = nullptr;
 
@@ -107,8 +107,8 @@ void priorityQueueType<Type>::enqueue(const Type& queueElement)
         queueFront = newNode;
         queueRear = newNode;
     } else {
-        nodeType<Type> *current = queueFront;
-        nodeType<Type> *previous = nullptr;
+        node<Type> *current = queueFront;
+        node<Type> *previous = nullptr;
 
         while (current != nullptr && current->info->getPriority() >= queueElement.getPriority()) {
             previous = current;
@@ -138,7 +138,7 @@ Type priorityQueueType<Type>::dequeue()
         throw out_of_range("Queue is empty");
     }
 
-    nodeType<Type> *temp = queueFront;
+    node<Type> *temp = queueFront;
     Type frontElement = *(queueFront->info);
     queueFront = queueFront->link;
 
@@ -146,7 +146,7 @@ Type priorityQueueType<Type>::dequeue()
         queueRear = nullptr;
     }
 
-    delete temp->info;
+    //delete temp->info;
     delete temp;
     currentSize--;
 

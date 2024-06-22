@@ -6,7 +6,6 @@
 #include "BugReport.h"
 #include "linkedQueue.h"
 #include "priorityQueue.h"
-//#include "priorityQueue.h"
 
 /* Program name: priorityQueue.cpp
 * Author: Carr O'Connor
@@ -78,7 +77,7 @@ int main(){
                     std::cout << "Reporter: " << report.getReporter() << std::endl;
                     std::cout << "Status: " << report.getStatus() << std::endl;
                     std::cout << "Priority: " << std::to_string(report.getPriority()) << std::endl;
-                    std::cout << "Date: \n" << report.getDate() << std::endl;
+                    std::cout << "Date: " << report.getDate() << std::endl << std::endl;
                     completedQueue.dequeue();
                 }
                 return 0;

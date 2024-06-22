@@ -83,6 +83,7 @@ void priorityQueueType<Type>::initializeQueue()
     {
         current = queueFront;
         queueFront = queueFront->link;
+        delete current->info;
         delete current;
     }
     queueRear = nullptr;

@@ -4,6 +4,8 @@
 #include <regex>
 #include <stdexcept>
 #include "BugReport.h"
+#include "linkedQueue.h"
+#include "priorityQueue.h"
 //#include "priorityQueue.h"
 
 /* Program name: priorityQueue.cpp
@@ -12,18 +14,18 @@
 * Purpose: Implement a priority queue using a linked list.
 */
 
-// For the main program, you will create a bug-tracking system for a piece of software. You will utilize the provided BugReport class to get bug reports from the user and give the highest priority reports to a developer. 
-// The program will run off of a menu with 3 options 1. Enter bug report 2. Distribute bug report 3. Quit. When the user chooses option 1 the program will gather the information for the bug report, and store it in a BugReport object. 
-// Utilize regular expressions to validate the report date. See the sample run below for an example of the input provided by the test.  When the user chooses option 2, grab the first bug report from the queue display it to the user, 
-// and add it to a linked list of completed BugReports.For option 3, display all of the completed BugReports from the linked list, then empty all of the bug reports from the queue and display the uncompleted bug reports.
-
 void printMenu();
 void resetStream();
 int inputInt(std::string prompt, int min, int max);
+std::string getDate();
 
 int main(){
-    int id = 0;
-    std::regex datePattern("([0-9]{4})-([0-9]{2})-([0-9]{2})");
+    int id = 1;
+    std::regex datePattern("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+    priorityQueueType<BugReport> priorityQueue;
+    linkedQueueType<BugReport> completedQueue;
+    priorityQueue.initializeQueue();
+    completedQueue.initializeQueue();
 
     while(true){
         printMenu();
@@ -37,8 +39,7 @@ int main(){
 
         switch(choice){
             case 1:
-                std::cout << "Enter the date of the report (yyyy-mm-dd): ";
-                std::cin >> date;
+                date = getDate();
                 if(std::regex_match(date, match, datePattern)){
                     std::cin.ignore(); // To ignore the remaining newline character from previous input
                     std::cout << "Enter the name of the reporter: ";
@@ -47,14 +48,39 @@ int main(){
                     std::getline(std::cin, description);
                     priority = inputInt("What is the priority 1 - 10 (1 is low, 10 is high): ", 1, 10);
                     BugReport report(id++, description, reporter, "new", priority, date);
+                    priorityQueue.enqueue(report);
                 } else {
-                    std::cout << "Invalid date format. Please enter the date in the format yyyy-mm-dd." << std::endl;
+                    std::cout << "The date entered is not valid. Please check that the date entered is in the correct format." << std::endl;
                 }
                 break;
             case 2:
-                // Distribute bug report
+                if(!priorityQueue.isEmptyQueue()){
+                    BugReport report = priorityQueue.front();
+                    std::cout << "BugReport ID: " << std::to_string(report.getId()) << std::endl;
+                    std::cout << "Description: " << report.getDescription() << std::endl;
+                    std::cout << "Reporter: " << report.getReporter() << std::endl;
+                    std::cout << "Status: " << report.getStatus() << std::endl;
+                    std::cout << "Priority: " << std::to_string(report.getPriority()) << std::endl;
+                    std::cout << "Date: " << report.getDate() << std::endl;
+                    completedQueue.enqueue(report);
+                    priorityQueue.dequeue();
+                } else {
+                    std::cout << "There are no bug reports to distribute." << std::endl;
+                }
                 break;
             case 3:
+                std::cout << "Quitting: \n" << std::endl;
+                std::cout << "List of Finished Bug Reports: \n" << std::endl;
+                while(!completedQueue.isEmptyQueue()){
+                    BugReport report = completedQueue.front();
+                    std::cout << "BugReport ID: " << std::to_string(report.getId()) << std::endl;
+                    std::cout << "Description: " << report.getDescription() << std::endl;
+                    std::cout << "Reporter: " << report.getReporter() << std::endl;
+                    std::cout << "Status: " << report.getStatus() << std::endl;
+                    std::cout << "Priority: " << std::to_string(report.getPriority()) << std::endl;
+                    std::cout << "Date: \n" << report.getDate() << std::endl;
+                    completedQueue.dequeue();
+                }
                 return 0;
         }
     }
@@ -84,6 +110,21 @@ int inputInt(std::string prompt, int min, int max){
     }
     
     return result;
+}
+
+string getDate(){
+    std::string date;
+    std::regex datePattern("^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$");
+    std::smatch match;
+    std::cout << "Enter the date of the report (yyyy-mm-dd): ";
+    std::cin >> date;
+    while(!std::regex_match(date, match, datePattern)){
+        std::cout << "The date entered is not valid. Please check that the date entered is in the correct format." << std::endl;
+        std::cout << "Enter the date of the report (yyyy-mm-dd): ";
+        resetStream();
+        std::cin >> date;
+    }
+    return date;
 }
 
 void resetStream(){
